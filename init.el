@@ -21,5 +21,6 @@
 
 
 (load-markdown "./readme.md")
-;; (load-markdown "./development.md")
+(load-markdown "./development.md")
+
 ;; (load-markdown "./example.md")
