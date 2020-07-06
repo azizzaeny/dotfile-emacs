@@ -116,7 +116,7 @@ cp ./test.md  ~/.emacs.d/test.md
 (package-initialize)
 ```
 
-** Package Configuration**
+**Package Configuration**
 
 ```emacs-lisp
 ;; github theme
@@ -135,6 +135,34 @@ cp ./test.md  ~/.emacs.d/test.md
 (require 'poly-markdown)
 (with-eval-after-load 'poly-markdown
   (add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode)))
-  
+
+;;show-paren
+(require 'paren)
+(setq show-paren-delay 0.5)
+(set-face-foreground 'show-paren-match "#def")
+(set-face-attribute 'show-paren-match nil :weight 'extra-bold)
+(show-paren-mode 1)
+
+;; uniqify buffer
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+```
+**Keybinding**
+
+```emacs-lisp
+(define-key custom-bindings-map (kbd "C-c e")  'mc/edit-lines)
+(define-key custom-bindings-map (kbd "C-c a")  'mc/mark-all-like-this)
+(define-key custom-bindings-map (kbd "C-c n")  'mc/mark-next-like-this)
+
+```
+
+**Activate Custom Minor Mode**
+```emacs-lisp
+
+(define-minor-mode custom-bindings-mode
+  "A mode that activates custom-bindings."
+  t nil custom-bindings-map)
+
+(custom-bindings-mode 1)
 
 ```
