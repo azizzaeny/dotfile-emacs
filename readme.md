@@ -111,6 +111,19 @@ cp ./test.md  ~/.emacs.d/test.md
 (el-get-bundle defunkt/markdown-mode
  :type github :pkgname "defunkt/markdown-mode")
 
+(el-get-bundle mooz/js2-mode
+  :type github :pkgname "mooz/js2-mode")
+
+(el-get-bundle parinfer)
+
+(el-get-bundle paredit)
+
+(el-get-bundle clojure-mode)
+
+(el-get-bundle rainbow-delimiters)
+(el-get-bundle aggressive-indent)
+(el-get-bundle smartparens)
+;; (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
 
 (el-get 'sync) ;; el should sync dependencies before package-initialize 
 (package-initialize)
@@ -146,6 +159,32 @@ cp ./test.md  ~/.emacs.d/test.md
 ;; uniqify buffer
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
+;;parinfer
+(require 'parinfer)
+
+;;clojure
+(require 'clojure-mode)
+(setq clojure-indent-style 'always-indent)
+(setq comment-column 0)
+
+(require 'rainbow-delimiters)
+(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+
+;; smartparen
+(require 'smartparens-config)
+(add-hook 'clojure-mode-hook #'smartparens-strict-mode)
+(add-hook 'js-mode-hook #'smartparens-mode)
+
+;;aggressive indent
+(require 'aggressive-indent)
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+(add-hook 'css-mode-hook #'aggressive-indent-mode)
+(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+;; (global-aggressive-indent-mode 1)
+;; (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
+
+
 ```
 **Keybinding**
 
