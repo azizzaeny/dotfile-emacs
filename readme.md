@@ -9,6 +9,7 @@ cp ~/.emacs.d/init.el ~/Desktop/p/emacs-backup/init`date +%Y%m%d%H`.el
 cp ~/.emacs.d/readme.md ~/Desktop/p/emacs-backup/readme`date +%Y%m%d%H`.md
 cp ~/.emacs.d/development.md ~/Desktop/p/emacs-backup/development`date +%Y%m%d%H`.md
 ls ~/Desktop/p/emacs-backup/
+notes: backup snippets
 ```
 
 **Sync**
@@ -19,6 +20,7 @@ cp ./readme.md  ~/.emacs.d/readme.md
 cp ./development.md  ~/.emacs.d/development.md
 cp ./example.md  ~/.emacs.d/example.md
 cp ./test.md  ~/.emacs.d/test.md
+notes: restore snippets
 ```
 
 ### Emacs Configuration
@@ -121,17 +123,26 @@ cp ./test.md  ~/.emacs.d/test.md
 (el-get-bundle clojure-mode)
 
 (el-get-bundle rainbow-delimiters)
-(el-get-bundle aggressive-indent)
-(el-get-bundle smartparens)
-;; (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
 
+(el-get-bundle aggressive-indent)
+
+(el-get-bundle smartparens)
+
+(el-get-bundle python-mode)
+
+(el-get-bundle emmet-mode)
+
+(el-get-bundle yasnippet)
+
+(el-get-bundle gist)
+  
 (el-get 'sync) ;; el should sync dependencies before package-initialize 
 (package-initialize)
 ```
 
 **Package Configuration**
 
-```emacs-lisp
+```emacs-lisp 
 ;; github theme
 (load "~/.emacs.d/el-get/github-theme/github-theme.el")
 (load-theme 'github t)
@@ -149,7 +160,7 @@ cp ./test.md  ~/.emacs.d/test.md
 (with-eval-after-load 'poly-markdown
   (add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode)))
 
-;;show-paren
+;; show-paren
 (require 'paren)
 (setq show-paren-delay 0.5)
 (set-face-foreground 'show-paren-match "#def")
@@ -184,7 +195,19 @@ cp ./test.md  ~/.emacs.d/test.md
 ;; (global-aggressive-indent-mode 1)
 ;; (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 
+;;emmet
+(require 'emmet-mode)
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(add-hook 'html-mode-hook 'emmet-mode)
+(setq emmet-indentation 2)
+(setq emmet-self-closing-tag-style " /")
 
+;;yasnippet
+(require 'yasnippet)
+(yas-global-mode 1)
+(setq yas-snippet-dirs '("~/.emacs.d/snippets/yas/"))
+
+		 
 ```
 **Keybinding**
 
@@ -192,7 +215,7 @@ cp ./test.md  ~/.emacs.d/test.md
 (define-key custom-bindings-map (kbd "C-c e")  'mc/edit-lines)
 (define-key custom-bindings-map (kbd "C-c a")  'mc/mark-all-like-this)
 (define-key custom-bindings-map (kbd "C-c n")  'mc/mark-next-like-this)
-
+(define-key custom-bindings-map (kbd "C-c j")  'emmet-expand-line)
 ```
 
 **Activate Custom Minor Mode**
