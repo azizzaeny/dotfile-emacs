@@ -1,0 +1,6 @@
+#!/usr/bin/sh
+mkdir -p ~/Desktop/p/emacs-backup/
+mkdir -p ~/.emacs.d/snippet/yas
+sudo chmod u+x ./sync
+sudo chmod u+x ./backup
+# file=./setup
