@@ -2,6 +2,8 @@
 
 ```emacs-lisp
 
+;;;; Poor Man Git comit add, status
+
 (defun dev/git-status ()
   (interactive)
   (shell-command "git status" "*git*"))
@@ -26,7 +28,8 @@
 (custom-key
   "gs" 'dev/git-status
   "ga" 'dev/git-add
-  "gc" 'dev/git-commit)
+  "gc" 'dev/git-commit
+  "gm" 'dev/git-commit)
 
 (defun dev/sync-dotfile ()
   (interactive)
@@ -39,7 +42,8 @@
 
 (custom-key
   "sy" 'dev/sync-dotfile
-  "rl" 'dev/reload-markdown-init)
+  "rl" 'dev/reload-markdown-init
+  "rs" 'restart-emacs)
 
 ```
 
