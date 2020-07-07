@@ -1,0 +1,8 @@
+#!/usr/bin/sh
+cp ./init.el  ~/.emacs.d/init.el
+cp ./readme.md  ~/.emacs.d/readme.md
+cp ./development.md  ~/.emacs.d/development.md
+cp ./example.md  ~/.emacs.d/example.md
+cp ./test.md  ~/.emacs.d/test.md
+cp -r ./snippet/ ~/.emacs.d/snippet/ 
+# file=./sync
