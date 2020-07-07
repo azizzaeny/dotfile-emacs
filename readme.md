@@ -1,11 +1,6 @@
-## Dotfile Emacs
-Load dotfiles from markdown
-
+## Emacs Configuration
 ```lisp
 ;; file=./init.el
-
-;; create functions to load Markdown
-
 (defun load-markdown (paths) 
   (let (file-path) 
     (setq file-path (expand-file-name paths))
@@ -26,8 +21,6 @@ Load dotfiles from markdown
 
 (load-markdown "~/.emacs.d/readme.md")
 (load-markdown "~/.emacs.d/development.md")
-
-;; (load-markdown "./test.md")
 
 (custom-set-variables
  '(custom-safe-themes t))
