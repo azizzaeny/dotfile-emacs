@@ -169,7 +169,6 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 
 (el-get-bundle emmet-mode)
 (el-get-bundle python-mode)
-
 (el-get-bundle yasnippet)
 (el-get-bundle gist)
 (el-get-bundle counsel)
@@ -182,7 +181,7 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (el-get-bundle iqbalansari/restart-emacs
   :type github :pkgname "iqbalansari/restart-emacs")
 
-
+(el-get-bundle general)
 
 (el-get 'sync)
 
@@ -309,42 +308,53 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 		(swiper . ivy--regex-plus)))
 
 ;; which-key
+(require 'which-key)
+(which-key-mode)
+(which-key-setup-side-window-bottom)
+(which-key-setup-minibuffer)
+(setq which-key-idle-delay 1)
+(setq which-key-idle-secondary-delay 0.01)
+(setq which-key-popup-type 'minibuffer)
+
+
 ;; auto-complete
+(require 'auto-complete)
+(ac-config-default)
+
 ;; multi-cursors
+(require 'multiple-cursors)
 
 ;; auto-pair
 (require 'autopair)
 (autopair-global-mode)
+```
+
+**Custom Key Bindings**
+
+```emacs-lisp
 
 (defvar custom-bindings-map (make-keymap)
   "A keymap for custom bindings.")
 
-(defun define-custom-key (key fn &optional binding)
-  (let (b)
-	(if (equal binding nil)
-		(setq b custom-bindings-map)
-	  (setq b binding))
-	(global-set-key (kbd key) nil)  
-	(define-key b (kbd key)  fn)))
+(general-define-key
+ "C-g"    'minibuffer-keyboard-quit
+ "C-s"     'counsel-grep-or-swiper
+ "C-x C-f" 'counsel-find-file
+ "C-x ag"  'counsel-ag
+ "C-x f"   'counsel-describe-function
+ "C-x l"   'counsel-find-library
+ "C-x f" nil )
 
-(define-custom-key "C-c e" 'mc/edit-lines)
-(define-custom-key "C-c n" 'mc/mark-next-like-this)
-(define-custom-key "C-c a"  'mc/mark-all-like-this)
-(define-custom-key "C-c j" 'emmet-expand-line)
 
-(define-key ivy-minibuffer-map (kbd "<ESC>") 'minibuffer-keyboard-quit)
-(define-key ivy-minibuffer-map (kbd "C-g") 'minibuffer-keyboard-quit)
-(define-key swiper-map (kbd "C-g") 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+(defconst custom-key "C-c")
 
-;; (define-key ivy-minibuffer-map (kbd "<up>") 'ivy-next-line)
-;; (define-key ivy-minibuffer-map (kbd "<down>") 'ivy-previous-line)
+(general-create-definer
+  custom-key :prefix "C-c")
 
-(define-custom-key "C-s" 'swiper)
-(define-custom-key "C-x f" 'counsel-describe-function)
-(define-custom-key "C-x l" 'counsel-find-library)
-(define-custom-key "C-x C-f" 'counsel-find-file)
-(define-custom-key "C-x ag" 'counsel-ag)
+(custom-key
+  "me" 'mc/edit-lines
+  "mn" 'mc/mark-next-lines
+  "me" 'emmet-expand-line)
 
 (define-minor-mode custom-bindings-mode
   "A mode that activates custom-bindings."
@@ -353,6 +363,8 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (custom-bindings-mode 1)
 
 ```
+
+
 ## Bugs and Strange behaviour 
 - The functions doesnt take the last emacs-lisp value when there is some code on it so make it at least two emacs-lisp and blank last-line 
 
