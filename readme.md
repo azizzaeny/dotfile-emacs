@@ -280,8 +280,23 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 ;; git config --global github.user <your-github-user-name>
 ;; git config --global github.oauth-token <your-personal-access-token-with-gist-scope>
 
-;; counsel
-;; ivy
+;; counsel, ivy, swiper
+(require 'counsel)
+(require 'ivy)
+(require 'swiper)
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+(setq search-default-mode #'char-fold-to-regexp)
+(setq ivy-initial-inputs-alist nil)
+(setq ivy-re-builders-alist
+	  '((ivy-switch-buffer . ivy-regex-plus)
+		(swiper . ivy--regex-plus)))
+
+(setq ivy-count-format "")
+(setq ivy-display-style nil)
+(setq ivy-minibuffer-faces nil)
+
 ;; which-key
 ;; auto-complete
 ;; multi-cursors
@@ -289,11 +304,30 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (defvar custom-bindings-map (make-keymap)
   "A keymap for custom bindings.")
 
-(define-key custom-bindings-map (kbd "C-c e")  'mc/edit-lines)
-(define-key custom-bindings-map (kbd "C-c a")  'mc/mark-all-like-this)
-(define-key custom-bindings-map (kbd "C-c n")  'mc/mark-next-like-this)
-(define-key custom-bindings-map (kbd "C-c j")  'emmet-expand-line)
-(global-set-key (kbd "C-x f") nil)
+(defun define-custom-key (key fn &optional binding)
+  (let (b)
+	(if (equal binding nil)
+		(setq b custom-bindings-map)
+	  (setq b binding))
+	(global-set-key (kbd key) nil)  
+	(define-key b (kbd key)  fn)))
+
+(define-custom-key "C-c e" 'mc/edit-lines)
+(define-custom-key "C-c n" 'mc/mark-next-like-this)
+(define-custom-key "C-c a"  'mc/mark-all-like-this)
+(define-custom-key "C-c j" 'emmet-expand-line)
+
+(define-key ivy-minibuffer-map (kbd "<ESC>") 'minibuffer-keyboard-quit)
+(define-key ivy-minibuffer-map (kbd "C-g") 'minibuffer-keyboard-quit)
+(define-key swiper-map (kbd "C-g") 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+
+(define-custom-key "C-s" 'swiper)
+(define-custom-key "C-x f" 'counsel-describe-function)
+(define-custom-key "C-x l" 'counsel-find-library)
+(define-custom-key "C-x C-f" 'counsel-find-file)
+
+
 
 (define-minor-mode custom-bindings-mode
   "A mode that activates custom-bindings."
