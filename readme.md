@@ -24,8 +24,9 @@ Configured to be loaded from markdown.
 ;; load two markdowns readme.md and development.md
 ;; in the folder we three another one is example.md but loaded
 
-(load-markdown "./readme.md")
-(load-markdown "./development.md")
+(load-markdown "~/.emacs.d/readme.md")
+(load-markdown "~/.emacs.d/development.md")
+
 ;; (load-markdown "./test.md")
 
 (custom-set-variables
@@ -174,7 +175,7 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (el-get-bundle which-key)
 (el-get-bundle auto-complete)
 (el-get-bundle multiple-cursors)
-
+(el-get-bundle autopair)
 
 (el-get 'sync)
 
@@ -301,6 +302,10 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 ;; auto-complete
 ;; multi-cursors
 
+;; auto-pair
+(require 'autopair)
+(autopair-global-mode)
+
 (defvar custom-bindings-map (make-keymap)
   "A keymap for custom bindings.")
 
@@ -326,7 +331,7 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (define-custom-key "C-x f" 'counsel-describe-function)
 (define-custom-key "C-x l" 'counsel-find-library)
 (define-custom-key "C-x C-f" 'counsel-find-file)
-
+(define-custom-key "C-x ag" 'counsel-ag)
 
 
 (define-minor-mode custom-bindings-mode
