@@ -1,5 +1,5 @@
 ## Dotfile Emacs
-Configured to be loaded from markdown. 
+Load dotfiles from markdown
 
 ```lisp
 ;; file=./init.el
@@ -60,6 +60,7 @@ cp ./development.md  ~/.emacs.d/development.md
 cp ./example.md  ~/.emacs.d/example.md
 cp ./test.md  ~/.emacs.d/test.md
 cp -r ./snippet/ ~/.emacs.d/snippet/ 
+
 # file=./sync
 ```
 
@@ -70,6 +71,7 @@ cp ~/.emacs.d/readme.md ~/Desktop/p/emacs-backup/readme`date +%Y%m%d%H`.md
 cp ~/.emacs.d/development.md ~/Desktop/p/emacs-backup/development`date +%Y%m%d%H`.md
 cp ~/.emacs.d/test.md ~/Desktop/p/emacs-backup/test`date +%Y%m%d%H`.md
 cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
+
 # file=./backup
 ```
 ### Emacs Configuration
@@ -287,16 +289,19 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (require 'swiper)
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
-(setq enable-recursive-minibuffers t)
-(setq search-default-mode #'char-fold-to-regexp)
+(setq enable-recursive-minibuffers nil)
+;; (setq search-default-mode #'char-fold-to-regexp)
 (setq ivy-initial-inputs-alist nil)
-(setq ivy-re-builders-alist
-	  '((ivy-switch-buffer . ivy-regex-plus)
-		(swiper . ivy--regex-plus)))
-
 (setq ivy-count-format "")
 (setq ivy-display-style nil)
 (setq ivy-minibuffer-faces nil)
+
+(add-to-list 'ivy-highlight-functions-alist
+             '(swiper--re-builder . ivy--highlight-ignore-order))
+
+(setq ivy-re-builders-alist
+	  '((ivy-switch-buffer . ivy--regex-plus)
+		(swiper . ivy--regex-plus)))
 
 ;; which-key
 ;; auto-complete
@@ -327,12 +332,14 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (define-key swiper-map (kbd "C-g") 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 
+;; (define-key ivy-minibuffer-map (kbd "<up>") 'ivy-next-line)
+;; (define-key ivy-minibuffer-map (kbd "<down>") 'ivy-previous-line)
+
 (define-custom-key "C-s" 'swiper)
 (define-custom-key "C-x f" 'counsel-describe-function)
 (define-custom-key "C-x l" 'counsel-find-library)
 (define-custom-key "C-x C-f" 'counsel-find-file)
 (define-custom-key "C-x ag" 'counsel-ag)
-
 
 (define-minor-mode custom-bindings-mode
   "A mode that activates custom-bindings."
