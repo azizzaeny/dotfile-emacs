@@ -179,6 +179,11 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (el-get-bundle multiple-cursors)
 (el-get-bundle autopair)
 
+(el-get-bundle iqbalansari/restart-emacs
+  :type github :pkgname "iqbalansari/restart-emacs")
+
+
+
 (el-get 'sync)
 
 (package-initialize)
@@ -240,7 +245,7 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 
 ;; paredit
 
-
+;; rainbow-delimiters
 (require 'rainbow-delimiters)
 (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
