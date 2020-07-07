@@ -1,3 +1,4 @@
+;; file=./init.el
 
 ;; create functions to load Markdown
 
@@ -19,8 +20,9 @@
 ;; load two markdowns readme.md and development.md
 ;; in the folder we three another one is example.md but loaded
 
-
 (load-markdown "./readme.md")
 (load-markdown "./development.md")
+;; (load-markdown "./test.md")
 
-;; (load-markdown "./example.md")
+(custom-set-variables
+ '(custom-safe-themes t))
