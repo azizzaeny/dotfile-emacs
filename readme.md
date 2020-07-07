@@ -157,12 +157,16 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (el-get-bundle clojure-mode)
 (el-get-bundle parinfer)
 (el-get-bundle paredit)
-
 (el-get-bundle rainbow-delimiters)
 (el-get-bundle aggressive-indent)
 (el-get-bundle smartparens)
-(el-get-bundle python-mode)
+
+(el-get-bundle fgallina/multi-web-mode
+  :type github :pkgname "fgallina/multi-web-mode")
+
 (el-get-bundle emmet-mode)
+(el-get-bundle python-mode)
+
 (el-get-bundle yasnippet)
 (el-get-bundle gist)
 (el-get-bundle counsel)
@@ -170,7 +174,7 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (el-get-bundle which-key)
 (el-get-bundle auto-complete)
 (el-get-bundle multiple-cursors)
-(el-get-bundle web-mode)
+
 
 (el-get 'sync)
 
@@ -250,6 +254,15 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (global-aggressive-indent-mode 1)
 (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 
+;;multi-web
+(require 'multi-web-mode)
+(setq mweb-default-major-mode 'html-mode)
+(setq mweb-tags '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
+                  (js-mode "<script +\\(type=\"text/javascript\"\\|language=\"javascript\"\\)[^>]*>" "</script>")
+                  (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
+(setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
+(multi-web-global-mode 1)
+
 ;;emmet
 (require 'emmet-mode)
 (add-hook 'css-mode-hook  'emmet-mode) 
@@ -257,6 +270,21 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (setq emmet-indentation 2)
 (setq emmet-self-closing-tag-style " /")
 
+;; python
+;; yasnippet
+(require 'yasnippet)
+(yas-global-mode 1)
+(setq yas-snippet-dirs '("~/.emacs.d/snippet/yas"))
+
+;; gist
+;; git config --global github.user <your-github-user-name>
+;; git config --global github.oauth-token <your-personal-access-token-with-gist-scope>
+
+;; counsel
+;; ivy
+;; which-key
+;; auto-complete
+;; multi-cursors
 
 (defvar custom-bindings-map (make-keymap)
   "A keymap for custom bindings.")
