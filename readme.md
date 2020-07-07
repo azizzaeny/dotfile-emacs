@@ -154,9 +154,10 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (el-get-bundle mooz/js2-mode
   :type github :pkgname "mooz/js2-mode")
 
+(el-get-bundle clojure-mode)
 (el-get-bundle parinfer)
 (el-get-bundle paredit)
-(el-get-bundle clojure-mode)
+
 (el-get-bundle rainbow-delimiters)
 (el-get-bundle aggressive-indent)
 (el-get-bundle smartparens)
@@ -184,6 +185,17 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (load "~/.emacs.d/el-get/github-theme/github-theme.el")
 (load-theme 'github t)
 
+;; uniqify buffer
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
+;; show-paren
+(require 'paren)
+(setq show-paren-delay 0.4)
+(set-face-foreground 'show-paren-match "#def")
+(set-face-attribute 'show-paren-match nil :weight 'extra-bold)
+(show-paren-mode 1)
+
 ;; markdown-mode
 (require 'markdown-mode)
 (with-eval-after-load 'markdown-mode
@@ -199,24 +211,28 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 
 ;; js2-mode
 
-;; show-paren
-(require 'paren)
-(setq show-paren-delay 0.4)
-(set-face-foreground 'show-paren-match "#def")
-(set-face-attribute 'show-paren-match nil :weight 'extra-bold)
-(show-paren-mode 1)
-
-;; uniqify buffer
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-
-;;clojure
+;; clojure-mode
 (require 'clojure-mode)
 (setq clojure-indent-style 'always-indent)
 (setq comment-column 0)
 
 ;;parinfer
 (require 'parinfer)
+
+(setq parinfer-extensions
+	  '(defaults pretty-parens paredit smart-tab smart-yank))
+(add-hook 'clojure-mode-hook #'parinfer-mode)
+(add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+(add-hook 'common-lisp-mode-hook #'parinfer-mode)
+(add-hook 'scheme-mode-hook #'parinfer-mode)
+(add-hook 'lisp-mode-hook #'parinfer-mode)
+(setq parinfer-auto-switch-indent-mode nil)  ;; default
+(setq parinfer-auto-switch-indent-mode-when-closing nil)  ;; default
+(setq parinfer-delay-invoke-threshold 6000)  ;; default
+(setq parinfer-delay-invoke-idle 0.3)  ;; default
+
+;; paredit
+
 
 (require 'rainbow-delimiters)
 (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
