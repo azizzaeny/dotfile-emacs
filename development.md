@@ -23,13 +23,38 @@
 	(setq msg (read-string "git commit -m "))
 	(shell-command (concat "git commit -m '" msg "'") "*git*")))
 
+(defun dev/git-push (origin branch)
+  (interactive)
+  (shell-command (concat "git push -u " origin " " branch)))
+
+(defun dev/git-push-origin ()
+  (interactive)
+  (let (branch b)
+	(setq branch (read-string "master?"))
+	(if (or (not branch) (equal branch "") (equal branch " "))
+		(setq b "master")
+	  (setq b branch))
+	(dev/git-push "origin" b)))
+
+(defun dev/git-remote-add (origin url)
+  (interactive)
+  (shell-command (concat "git remote add " origin " " url)))
+
+(defun dev/git-remote-add-origin ()
+  (interactive)
+  (let (url)
+	(setq url (read-string "url"))
+	(dev/git-remote-add "origin" url)))
+
 (dev/remove-output-async) ;; make it silence
 
 (custom-key
   "gs" 'dev/git-status
   "ga" 'dev/git-add
   "gc" 'dev/git-commit
-  "gm" 'dev/git-commit)
+  "gm" 'dev/git-commit  
+  "gp" 'dev/git-push-origin
+  "gr" 'dev/git-remote-add-origin)
 
 (defun dev/sync-dotfile ()
   (interactive)
@@ -49,8 +74,11 @@
 
 Notes:
 
-```lisp
-reload-markdown on key bind
+```text
+- reload-markdown on key bind
+- git push gp optional args, when no args push to master, origin/master origin/develop
+- more control for git, change branch,gi git init, git remote add,
+- gpu origin, letter on add can change branch and origin 
 ```
 
 End of line 
