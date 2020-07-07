@@ -232,11 +232,13 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 
 (setq parinfer-extensions
 	  '(defaults pretty-parens paredit smart-tab smart-yank))
-(add-hook 'clojure-mode-hook #'parinfer-mode)
-(add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-(add-hook 'common-lisp-mode-hook #'parinfer-mode)
-(add-hook 'scheme-mode-hook #'parinfer-mode)
-(add-hook 'lisp-mode-hook #'parinfer-mode)
+
+;; (add-hook 'clojure-mode-hook #'parinfer-mode)
+;; (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+;; (add-hook 'common-lisp-mode-hook #'parinfer-mode)
+;; (add-hook 'scheme-mode-hook #'parinfer-mode)
+;; (add-hook 'lisp-mode-hook #'parinfer-mode)
+
 (setq parinfer-auto-switch-indent-mode nil)  ;; default
 (setq parinfer-auto-switch-indent-mode-when-closing nil)  ;; default
 (setq parinfer-delay-invoke-threshold 6000)  ;; default
