@@ -6,6 +6,9 @@
   (interactive)
   (shell-command "./sync"))
 
+(custom-key
+  "sy" 'dev/sync-dotfile)
+
 
 ```
 ```emacs-lisp
