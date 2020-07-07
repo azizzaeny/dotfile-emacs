@@ -19,7 +19,7 @@
   (interactive)
   (let (msg)
 	(setq msg (read-string "git commit -m "))
-	(shell-command (concat "git commit -m '" msg "'"))))
+	(shell-command (concat "git commit -m '" msg "'") "*git*")))
 
 (dev/remove-output-async) ;; make it silence
 
