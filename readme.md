@@ -419,7 +419,12 @@ Here it is. (Long live literate mode! ;)
 
 **Load and Tangle Snippet**
 
+
 ```emacs-lisp
+
+(defun filter-list (@predicate @sequence)
+  (delete "e3824ad41f2ec1ed" (mapcar (lambda ($x) (if (funcall @predicate $x)  $x "e3824ad41f2ec1ed" )) @sequence)))
+
 
 (defun snippet/write-file (list-block)
   (interactive)
@@ -431,10 +436,7 @@ Here it is. (Long live literate mode! ;)
 		  (make-directory dir t))))
 	(with-temp-buffer
 	  (insert content)
-	  (write-region (point-min) (point-max) filename)
-	  (message "write-region %s with content %s" filename content)
-	  )	
-	))
+	  (write-region (point-min) (point-max) filename))))
 
 
 (defun snippet/get-file-string (path)
@@ -462,45 +464,38 @@ Here it is. (Long live literate mode! ;)
 		  (add-to-list 'res (list (cons 'start s)
 								  (cons 'end e)
 								  (cons 'file f)
-								  (cons 'content c)))
-		  )				
-		)	  
-	  )
+								  (cons 'content c))))))
 	res))
-
-(defun filter-list (@predicate @sequence)
-  (delete "e3824ad41f2ec1ed" (mapcar (lambda ($x) (if (funcall @predicate $x)  $x "e3824ad41f2ec1ed" )) @sequence)))
 
 (defun snippet/filter-nil-file (list-block)
   (filter-list (lambda (l)
 				 (not (equal (cdr (assoc 'file l)) nil))
 				 ) list-block))
 
-(defun tangle-all-snippets ()
+(defun snippet/tangle-all ()
   (interactive)
   (let ((p (expand-file-name "~/.emacs.d/snippet.md"))
 		list-block)
 	(setq list-block (snippet/read-meta (snippet/get-file-string p)))
-	(mapcar 'snippet/write-file (snippet/filter-nil-file list-block)))	
-  )
-
-(snippet/write-file '((file . "~/Desktop/out") (content . "fofofofo")))
+	(mapcar 'snippet/write-file (snippet/filter-nil-file list-block))))
 
 
-(mapcar 'snippet/write-file 
-		(list '((file . "~/Desktop/out/out1") (content . "out1")) '((file . "~/Desktop/out/out2") (content . "out2"))))
+(defun snippet/clean ()
+  (interactive)
+  (shell-command "rm -rf ~/.emacs.d/snippets/*"))
 
+(defun snippet/reload-yas ()
+  (interactive)
+  (snippet/clean)
+  (snippet/tangle-all)
+  (shell-command "cp -rv ./snippets/. ~/.emacs.d/snippets/.")
+  (yas-reload-all))
 
-(defun reload-yas-snippet ())
-(defun clean-yas-snippet ())
+(custom-key
+  "snr" 'snippet/reload-yas
+  "snc" 'snippet/clean
+  "snt" 'snippet/tangle-all)
 
-
-(print (snippet/filter-nil-file (snippet/read-meta (snippet/get-file-string "~/.emacs.d/snippet.md"))))
-
-(tangle-all-snippets)
-
-;; (setq jamap (list (list  (cons 'file "foo"))
-;; 				  (list (cons 'file nil))))
 
 ```
 
