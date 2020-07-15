@@ -62,7 +62,7 @@ Basic or Common snippet configuration per language or major mode specific.
 
 **js2-mode**
 
-```text file=./snippets/js2-mode/.yas-parents 
+```text file=~/.emacs.d/snippets/js2-mode/.yas-parents 
 
 js-mode
 ```
@@ -70,7 +70,7 @@ js-mode
 **js-mode**
 1. for of
 
-```js file=./snippets/js-mode/fof 
+```js file=~/.emacs.d/snippets/js-mode/fof 
 
 # name: forOf
 # key: fof
@@ -83,7 +83,7 @@ for(let ${1:item} of ${2:object}) {
 
 2. for loop
 
-```js file=./snippets/js-mode/for 
+```js file=~/.emacs.d/snippets/js-mode/for 
 
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: for
@@ -95,7 +95,7 @@ for (var ${1:i} = ${2:0}; $1 < ${3:collection}.length; $1++) {
 
 3. let 
 
-```js file=./snippets/js-mode/let 
+```js file=~/.emacs.d/snippets/js-mode/let 
 
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: let declaration
@@ -106,7 +106,7 @@ let ${1:name} = ${2:initial};
 
 4. const 
 
-```js file=./snippets/js-mode/const 
+```js file=~/.emacs.d/snippets/js-mode/const 
 
 # name: const declaration
 # key: const
@@ -116,7 +116,7 @@ const ${1:name} = ${2:initial};
 
 5. function
 
-```js file=./snippets/js-mode/function 
+```js file=~/.emacs.d/snippets/js-mode/function 
 
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: function
@@ -128,7 +128,7 @@ function ${1:name}(${2:arg}) {
 ```
 6. class
 
-```js file=./snippets/js-mode/class
+```js file=~/.emacs.d/snippets/js-mode/class  
 
 # name: class
 # key: class
@@ -145,7 +145,7 @@ class ${1:Class}${2: extends ${3:ParentClass}} {
 
 1. import 
 
-```go file=./snippets/go-mode/import 
+```go file=~/.emacs.d/snippets/go-mode/import 
 
 # name: import
 # key: imp
@@ -158,7 +158,7 @@ $0
 
 1. defun
 
-```elisp file=./snippets/emacs-lisp-mode/defun 
+```elisp file=~/.emacs.d/snippets/emacs-lisp-mode/defun 
 
 # name: defun
 # key: def
@@ -173,7 +173,7 @@ $0
 
 1.js-inline 
 
-```html file=./snippets/html-mode/script.js 
+```html file=~/.emacs.d/snippets/html-mode/script.js 
 
 # name: script js inner
 # --
@@ -184,7 +184,7 @@ $0
 
 2. js-src 
 
-```html file=./snippets/html-mode/script.js-src 
+```html file=~/.emacs.d/snippets/html-mode/script.js-src 
 
 # name: script js src
 # --
@@ -193,7 +193,7 @@ $0
 
 3. html 
 
-```html file=./snippets/html-mode/html 
+```html file=~/.emacs.d/snippets/html-mode/html 
 
 # name: html
 # --
@@ -204,7 +204,7 @@ $0
 
 4. link stylesheet
 
-```html file=./snippets/html-mode/link 
+```html file=~/.emacs.d/snippets/html-mode/link 
 
 # name: link stylesheet
 # --
@@ -216,7 +216,7 @@ $0
 
 1. bg 
 
-```txt file=./snippets/css-mode/bg 
+```txt file=~/.emacs.d/snippets/css-mode/bg 
 
 # name: background-color
 # --
@@ -227,7 +227,7 @@ background-color: #${1:fff};
 
 1. require 
 
-```clojure file=./snippets/clojure-mode/require 
+```clojure file=~/.emacs.d/snippets/clojure-mode/require 
 
 # name : require
 # key  : require
@@ -238,7 +238,7 @@ background-color: #${1:fff};
 
 2. key opts 
 
-```clojure file=./snippets/clojure-mode/opts 
+```clojure file=~/.emacs.d/snippets/clojure-mode/opts 
 
 # key: opts
 # name: opts
@@ -250,7 +250,7 @@ background-color: #${1:fff};
 
 3. fn 
 
-```clojure file=./snippets/clojure-mode/fn 
+```clojure file=~/.emacs.d/snippets/clojure-mode/fn 
 
 # name: fn
 # key: fn
@@ -261,7 +261,7 @@ background-color: #${1:fff};
 
 4. def
 
-```clojure file=./snippets/clojure-mode/def 
+```clojure file=~/.emacs.d/snippets/clojure-mode/def 
 
 # name: def
 # key : def
