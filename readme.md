@@ -1,7 +1,13 @@
-## Emacs Configuration
+## Configuring Emacs
+
+I choose to load my emacs configuration and snippet from markdown. i think it better to managing the snippet and config from one files. 
+Here it is. (Long live literate mode! ;)
+
+**init.el**
+
 ```lisp
 ;; file=./init.el
-(defun load-markdown (paths) 
+(defun load-markdown (paths)  
   (let (file-path) 
     (setq file-path (expand-file-name paths))
     (if (file-exists-p file-path) ;;if exists
@@ -10,67 +16,23 @@
           (goto-char (point-min)) ;; go to the first point
           (while (not (eobp) ) ;; while not end of buffer
             (forward-line 1)  ;; forward one line
-            (re-search-forward "^```emacs-lisp$" (point-max) t) ;; search for begining block
+            (re-search-forward "^```emacs-lisp" (point-max) t) ;; search for begining block
             (let ((point-region (match-end 0))) ;; store the point region
               (re-search-forward "^```$" (point-max) t) ;; search for ending block
               (eval-region point-region (match-beginning 0))))) ;;eval each region selected
       (message "No file to be founds"))))
 
-;; load two markdowns readme.md and development.md
-;; in the folder we three another one is example.md but loaded
-
 (load-markdown "~/.emacs.d/readme.md")
-(load-markdown "~/.emacs.d/development.md")
 
 (custom-set-variables
  '(custom-safe-themes t))
-
 ```
 
-### Installation, Usage and Setup
-
-**Develop**
-to start `git clone https://github.com/azizzaeny/dotfile-emacs.git` cd into the folder
-`sudo chmod u+x ./setup` then `./setup` then start synch files `./sync`  
-
-**Prepare Setup**
-
-```sh
-#!/usr/bin/sh
-mkdir -p ~/Desktop/p/emacs-backup/
-mkdir -p ~/.emacs.d/snippet/yas
-sudo chmod u+x ./sync
-sudo chmod u+x ./backup
-# file=./setup
-```
-
-**Sync**
-```sh
-#!/usr/bin/sh
-cp ./init.el  ~/.emacs.d/init.el
-cp ./readme.md  ~/.emacs.d/readme.md
-cp ./development.md  ~/.emacs.d/development.md
-cp ./example.md  ~/.emacs.d/example.md
-cp ./test.md  ~/.emacs.d/test.md
-cp -r ./snippet/ ~/.emacs.d/snippet/ 
-
-# file=./sync
-```
-
-**Backup**
-```sh
-cp ~/.emacs.d/init.el ~/Desktop/p/emacs-backup/init`date +%Y%m%d%H`.el
-cp ~/.emacs.d/readme.md ~/Desktop/p/emacs-backup/readme`date +%Y%m%d%H`.md
-cp ~/.emacs.d/development.md ~/Desktop/p/emacs-backup/development`date +%Y%m%d%H`.md
-cp ~/.emacs.d/test.md ~/Desktop/p/emacs-backup/test`date +%Y%m%d%H`.md
-cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
-
-# file=./backup
-```
 ### Emacs Configuration
 
-```emacs-lisp
+**Basic UI Setup and General Setup**
 
+```emacs-lisp
 (scroll-bar-mode -1)
 (tool-bar-mode   -1)
 (tooltip-mode    -1)
@@ -93,19 +55,32 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (setq comment-style 'extra-line)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq redisplay-dont-pause t)
+```
 
+**Backup-files**   
+
+```emacs-lisp
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (setq create-lockfiles nil)
 (setq backup-inhibited t)
 (setq auto-save-list-file-prefix nil)
+```
 
+**Line-number, spacing**  
+
+```emacs-lisp
 (setq line-number-mode nil)
 (setq indicate-empty-lines t)
 (setq global-hl-line-mode nil)
 (setq tab-width 2)
 (setq toggle-truncate-lines t)
 (setq indent-tabs-mode nil)
+```
+
+**Cursor, mouse-wheel, scroll**
+
+```emacs-lisp
 
 (set-default (quote cursor-type) t)
 (blink-cursor-mode -1)
@@ -117,21 +92,21 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (setq scroll-step 2)  ;; keyboard scroll one line at a time
 (setq scroll-conservatively 10000)
 (setq scroll-preserve-screen-position t)
+```
 
+**The el-get bundler capitano**  
 
-(defvar custom-bindings-map (make-keymap)
-  "A keymap for custom bindings.")
+```emacs-lisp
 
 (defun initialize-el-get ()
   (add-to-list 'load-path "~/.emacs.d/el-get/el-get")  
   (unless (require 'el-get nil 'noerror)
-    (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
+	(with-current-buffer
+		(url-retrieve-synchronously
+		 "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+	  (goto-char (point-max))
+	  (eval-print-last-sexp)))
   (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes"))
-
 
 (initialize-el-get)
 
@@ -181,17 +156,20 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (package-initialize)
 
 ;; add to load-path
-
 ```
 
+**Configuring each packages**   
 
 ```emacs-lisp
+;; ah.. yes. white themes
 (load "~/.emacs.d/el-get/github-theme/github-theme.el")
 (load-theme 'github t)
+
 
 ;; uniqify buffer
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
 
 ;; show-paren
 (require 'paren)
@@ -200,6 +178,7 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
 (show-paren-mode 1)
 
+
 ;; markdown-mode
 (require 'markdown-mode)
 (with-eval-after-load 'markdown-mode
@@ -207,11 +186,13 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
     "Major mode for editing GitHub Flavored Markdown files" t)
   (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode)))
 
+
 ;; polymode poly-markdown
 (require 'polymode)
 (require 'poly-markdown)
 (with-eval-after-load 'poly-markdown
   (add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode)))
+
 
 ;; js2-mode
 
@@ -220,22 +201,21 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (setq clojure-indent-style 'always-indent)
 (setq comment-column 0)
 
+
 ;;parinfer
 (require 'parinfer)
-
 (setq parinfer-extensions
 	  '(defaults pretty-parens paredit smart-tab smart-yank))
-
 ;; (add-hook 'clojure-mode-hook #'parinfer-mode)
 ;; (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
 ;; (add-hook 'common-lisp-mode-hook #'parinfer-mode)
 ;; (add-hook 'scheme-mode-hook #'parinfer-mode)
 ;; (add-hook 'lisp-mode-hook #'parinfer-mode)
-
 (setq parinfer-auto-switch-indent-mode nil)  ;; default
 (setq parinfer-auto-switch-indent-mode-when-closing nil)  ;; default
 (setq parinfer-delay-invoke-threshold 6000)  ;; default
 (setq parinfer-delay-invoke-idle 0.3)  ;; default
+
 
 ;; paredit
 
@@ -243,10 +223,12 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (require 'rainbow-delimiters)
 (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
+
 ;; smartparen
 (require 'smartparens-config)
 (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
 (add-hook 'js-mode-hook #'smartparens-mode)
+
 
 ;;aggressive indent
 (require 'aggressive-indent)
@@ -255,6 +237,7 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 (global-aggressive-indent-mode 1)
 (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
+
 
 ;;multi-web
 (require 'multi-web-mode)
@@ -265,6 +248,7 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
 (multi-web-global-mode 1)
 
+
 ;;emmet
 (require 'emmet-mode)
 (add-hook 'css-mode-hook  'emmet-mode) 
@@ -272,11 +256,13 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (setq emmet-indentation 2)
 (setq emmet-self-closing-tag-style " /")
 
+
 ;; python
 ;; yasnippet
 (require 'yasnippet)
 (yas-global-mode 1)
-(setq yas-snippet-dirs '("~/.emacs.d/snippet/yas"))
+(setq yas-snippet-dirs '("~/.emacs.d/snippet/"))
+
 
 ;; gist
 ;; git config --global github.user <your-github-user-name>
@@ -294,13 +280,14 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (setq ivy-count-format "")
 (setq ivy-display-style nil)
 (setq ivy-minibuffer-faces nil)
-
 (add-to-list 'ivy-highlight-functions-alist
              '(swiper--re-builder . ivy--highlight-ignore-order))
 
 (setq ivy-re-builders-alist
 	  '((ivy-switch-buffer . ivy--regex-plus)
 		(swiper . ivy--regex-plus)))
+
+
 
 ;; which-key
 (require 'which-key)
@@ -316,6 +303,7 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (require 'auto-complete)
 (ac-config-default)
 
+
 ;; multi-cursors
 (require 'multiple-cursors)
 
@@ -324,15 +312,14 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 (autopair-global-mode)
 ```
 
-**Custom Key Bindings**
+**Custom Key Bindings Basic Editing/Searching**
 
 ```emacs-lisp
-
 (defvar custom-bindings-map (make-keymap)
   "A keymap for custom bindings.")
 
 (general-define-key
- "C-g"    'minibuffer-keyboard-quit
+ "C-g"     'minibuffer-keyboard-quit
  "C-s"     'counsel-grep-or-swiper
  "C-x C-f" 'counsel-find-file
  "C-x ag"  'counsel-ag
@@ -343,20 +330,145 @@ cp -r ~/.emacs.d/snippet ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`/
 
 (defconst custom-key "C-c")
 
+
 (general-create-definer
   custom-key :prefix "C-c")
+
 
 (custom-key
   "me" 'mc/edit-lines
   "mn" 'mc/mark-next-lines
   "me" 'emmet-expand-line)
 
+
 (define-minor-mode custom-bindings-mode
   "A mode that activates custom-bindings."
   t nil custom-bindings-map)
 
-(custom-bindings-mode 1)
 
+(custom-bindings-mode 1)
+```
+
+**Poor Man's Git ;0**  
+
+```emacs-lisp
+
+(defun git/status ()
+  (interactive)
+  (shell-command "git status" "*git*"))
+
+(defun remove-output-async ()
+  (add-to-list 'display-buffer-alist
+			   (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil))))
+
+(defun git/add ()
+  (interactive)
+  (let (which-file) (setq which-file (read-file-name "git add ~"))
+	   (async-shell-command (concat "git add " which-file))))
+
+(defun git/commit ()
+  (interactive)
+  (let (msg)
+	(setq msg (read-string "git commit -m "))
+	(shell-command (concat "git commit -m '" msg "'") "*git*")))
+
+(defun git/push (origin branch)
+  (interactive)
+  (shell-command (concat "git push -u " origin " " branch)))
+
+(defun git/push-origin ()
+  (interactive)
+  (let (branch b)
+	(setq branch (read-string "master?"))
+	(if (or (not branch) (equal branch "") (equal branch " "))
+		(setq b "master")
+	  (setq b branch))
+	(git/push "origin" b)))
+
+(defun git/remote-add (origin url)
+  (interactive)
+  (shell-command (concat "git remote add " origin " " url)))
+
+
+(defun git/remote-add-origin ()
+  (interactive)
+  (let (url)
+	(setq url (read-string "url"))
+	(git/remote-add "origin" url)))
+
+(remove-output-async) ;; make it silence
+
+(custom-key
+  "gits" 'git/status
+  "gita" 'git/add
+  "gitc" 'git/commit
+  "gitm" 'git/commit  
+  "gitp" 'git/push-origin
+  "gitu" 'git/push-origin
+  "gitr" 'git/remote-add-origin)
+
+```
+
+**Reloading, Syncing dotfile-emacs**
+
+```emacs-lisp
+
+(defun emacs/sync-dotfile ()
+  (interactive)
+  (shell-command "./bin/sync"))
+
+(defun emacs/reload-markdown-init ()
+  (interactive)
+  (load-markdown "~/.emacs.d/readme.md")
+  (load-markdown "~/.emacs.d/development.md"))
+
+(custom-key
+  "esy" 'emacs/sync-dotfile
+  "erl" 'emacs/reload-markdown-init
+  "ers" 'restart-emacs)
+
+```
+
+**Load/Tangle Snippet**
+
+### Installation, Usage and Setup
+
+**Develop**  
+to start `git clone https://github.com/azizzaeny/dotfile-emacs.git`
+cd into the folder  `sudo chmod u+x ./setup` then `./setup` then start synch files `./sync`  
+
+**Prepare Setup**  
+
+```sh	
+
+#!/usr/bin/sh
+mkdir -p ~/Desktop/p/emacs-backup/
+mkdir -p ~/.emacs.d/snippets/
+sudo chmod u+x ./sync
+sudo chmod u+x ./backup
+# file=./bin/setup
+```
+
+**Sync configuration**   
+
+```sh		
+#!/usr/bin/sh
+cp -v ./init.el  ~/.emacs.d/init.el
+cp -v ./readme.md  ~/.emacs.d/readme.md
+cp -v ./snippet.md  ~/.emacs.d/snippet.md
+# cp -rv ./snippet/ ~/.emacs.d/snippet/ 
+# file=./bin/sync
+
+```
+
+**Backup configuration**
+
+```sh
+#!/usr/bin/sh 
+cp -v ~/.emacs.d/init.el ~/Desktop/p/emacs-backup/init`date +%Y%m%d%H`.el
+cp -v ~/.emacs.d/readme.md ~/Desktop/p/emacs-backup/readme`date +%Y%m%d%H`.md
+cp -v ~/.emacs.d/snippet.md ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`.md
+# file=./bin/backup
 ```
 
 
