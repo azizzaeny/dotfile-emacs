@@ -3,21 +3,20 @@
 ### What is Yasnippet
 > "yasnippet is a way of writting snippet"
 
-a file defining a snippet contains a the template to be expanded.     
-the meta configuration directives look like `# property : value` if doesnt found the file itself considered as snippet templates      
+file defining a snippet contains the template to be expanded.     
+the meta configuration directives look like `# property : value` if it does not found in the prop value then the file itself considered as snippet templates      
 
 example:   
 
-```
+```txt
 # contributor : azizzaeny
 # name: ...
 # --
 _${init}_
 ```
-
 **Snippet Properties**  
 
-``` 
+```txt 
 # key        : abbrev, type expand snippet beffor hitting yas-expand
 # name       : one-line displayed on the menu, just descriptive. and distinguishable from others
 # condition  : snippet conditions if has condition.
@@ -29,10 +28,9 @@ _${init}_
 
 **Syntax**    
 
-```
-` is to emed emacs-lisp code
+```txt
+use `` to eval emacs-lisp code
 example: 
-
 for ($1;$2;$3) {
 `yas-selected-text`$0
 }
@@ -44,17 +42,15 @@ bracket is default value
 \begin{${1:enumerate}}
 $0
 \end{$1} 
-
 ```
 
 **Organizing Snippet**   
 
-```
-(setq yas-snippet-dirs '("~"))
-
+```txt
+(setq yas-snippet-dirs '("/path/to/dir/snippets"))
 .yas-parents is a way to describing parent mode!
+yas automaticly arrange snippet based on major or minor mode that currently active
 
-yas auto maticly arrange snippet based on mode 
 ```
 
 Inspired from various example
@@ -63,128 +59,107 @@ Inspired from various example
 
 ## Snippets Configuration 
 Basic or Common snippet configuration per language or major mode specific.
- 
-#### clojure mode
 
-def   
-```clojure file=./snippets/clojure-mode/def 
-# name: def
-# key : def
-# --
-(def $0)
-```
-fn 
-```clojure file=./snippets/clojure-mode/fn 
-# name: fn
-# key: fn
-# --
-(fn [$1]
-  $0)$>
+**js2-mode**
+
+```text file=./snippets/js2-mode/.yas-parents 
+
+js-mode
 ```
 
-opts arguments
+**js-mode**
+1. for of
 
-```clojure file=./snippets/clojure-mode/opts
-# key: opts
-# name: opts
-# --
-{:keys [$1]$>
- :or {$2}$>
- :as $3}$>
-```
-ns 
+```js file=./snippets/js-mode/fof 
 
-```clojure file=./snippets/clojure-mode/ns
-# name: ns
-# key: ns
+# name: forOf
+# key: fof
 # --
-(ns `(cl-flet ((try-src-prefix
-		(path src-pfx)
-		(let ((parts (split-string path src-pfx)))
-		  (if (= 2 (length parts))
-		      (cl-second parts)
-		    nil))))
-       (let* ((p (buffer-file-name))
-	      (p2 (cl-first
-		   (cl-remove-if-not '(lambda (x) x)
-				     (mapcar
-				      '(lambda (pfx)
-					 (try-src-prefix p pfx))
-				      '("/src/cljs/" "/src/clj/" "/src/" "/test/")))))
-	      (p3 (file-name-sans-extension p2))
-	      (p4 (mapconcat '(lambda (x) x)
-			     (split-string p3 "/")
-			     ".")))
-	 (replace-regexp-in-string "_" "-" p4)))`)
+
+for(let ${1:item} of ${2:object}) {
+	${0}
+}
 ```
 
-require
+2. for loop
 
-```clojure file=./snippets/clojure-mode/require
-# name: require
-# key: require
-# expand-env: ((yas-triggers-in-field nil))
+```js file=./snippets/js-mode/for 
+
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: for
 # --
-(:require [$1 :as $2])$>
+for (var ${1:i} = ${2:0}; $1 < ${3:collection}.length; $1++) {
+	$0
+}
 ```
 
-#### css-mode 
+3. let 
 
-bg 
+```js file=./snippets/js-mode/let 
 
-```css file=./snippets/css-mode/bg
-# name: background-color: ...
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: let declaration
+# key: let
 # --
-background-color: #${1:fff};
+let ${1:name} = ${2:initial};
 ```
 
-#### html-mode
+4. const 
 
-html 
-```html file=./snippets/html-mode/html
-# name: <html>...</html>
+```js file=./snippets/js-mode/const 
+
+# name: const declaration
+# key: const
 # --
-<html>
+const ${1:name} = ${2:initial};
+```
+
+5. function
+
+```js file=./snippets/js-mode/function 
+
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: function
+# key: f
+# --
+function ${1:name}(${2:arg}) {
+    $0
+}
+```
+6. class
+
+```js file=./snippets/js-mode/class
+
+# name: class
+# key: class
+# --
+class ${1:Class}${2: extends ${3:ParentClass}} {
+	${4:constructor(${5:arg}) {
+		${6:super(arg);}
+		$7
+	}}
+	$0
+}
+```
+**go-mode**
+
+1. import 
+
+```go file=./snippets/go-mode/import 
+
+# name: import
+# key: imp
+# --
+import "$1"
 $0
-</html>
 ```
 
+**emacs-lisp-mode**
 
-doctype 
-```html file=./snippets/html-mode/doctype
-# name: Doctype HTML 5
-# group : meta
-# --
-<!DOCTYPE html>
-```
+1. defun
 
-link stylesheet 
-```html file=./snippets/html-mode/link.style
-# name: link stylesheet
-# --
-<link rel="${1:stylesheet}" href="${2:url}" type="${3:text/css}" media="${4:screen}" />
-```
+```elisp file=./snippets/emacs-lisp-mode/defun 
 
-script js src 
-```html file=./snippets/html-mode/script.js-src
-# name: script js src
-# --
-<script type="text/javascript" src="$1"></script>
-```
-
-script js inline 
-```html file=./snippets/html-mode/script.js 
-# name: script js inner
-# --
-<script type="text/javascript">
-$0
-</script>
-```
-
-#### emacs-lisp-mode 
-
-defun 
-```elisp file=./snippets/emacs-lisp-mode/defun
 # name: defun
 # key: def
 # --
@@ -194,116 +169,102 @@ defun
   $0)
 ```
 
+**html-mode**
 
-#### sh-mode
+1.js-inline 
 
-args 
-```sh file=./snippets/sh-mode/args
-# name:args
-# key: args
+```html file=./snippets/html-mode/script.js 
+
+# name: script js inner
 # --
-if [ $# -lt ${1:2} ]
-   then $0
-fi
-```
-
-
-#### go-mode
-
-import 
-```go file=./snippets/go-mode/import
-# name: import
-# key: imp
-# --
-import "$1"
-$0
-```
-
-
-#### js-mode
-
-class 
-```js file=./snippets/js-mode/class
-# name: class
-# key: class
-# --
-class ${1:Class}${2: extends ${3:ParentClass}} {
-  ${4:constructor(${5:arg}) {
-    ${6:super(arg);}
-    $7
-  }}
-
+<script type="text/javascript">
   $0
-}
+</script>
 ```
 
-function 
-```js file=./snippets/js-mode/function
-# -*- mode: snippet; require-final-newline: nil -*-
-# name: function
-# key: f
+2. js-src 
+
+```html file=./snippets/html-mode/script.js-src 
+
+# name: script js src
 # --
-function ${1:name}(${2:arg}) {
-    $0
-}
+<script type="text/javascript" src="$1"></script>
 ```
 
-const 
-```js file=./snippets/js-mode/const
-# name: const declaration
-# key: const
-# --
-const ${1:name} = ${2:initial};
-```
+3. html 
 
-let 
-```js file=./snippets/js-mode/let
-# -*- mode: snippet; require-final-newline: nil -*-
-# name: let declaration
-# key: let
-# --
-let ${1:name} = ${2:initial};
-```
+```html file=./snippets/html-mode/html 
 
-for loop 
-```js file=./snippets/js-mode/for
-# -*- mode: snippet; require-final-newline: nil -*-
-# name: for
+# name: html
 # --
-for (var ${1:i} = ${2:0}; $1 < ${3:collection}.length; $1++) {
+<html>
   $0
-}
+</html>
 ```
 
-for loop 
-```js file=./snippets/js-mode/fof
-# name: forOf
-# key: fof
+4. link stylesheet
+
+```html file=./snippets/html-mode/link 
+
+# name: link stylesheet
 # --
-
-for(let ${1:item} of ${2:object}) {
-  ${0}
-}
-```
-#### js2-mode 
-
-using parent js-mode
-
-```text file=./snippets/js2-mode/.yas-parents
-js-mode
+<link rel="${1:stylesheet}" href="${2:url}" type="${3:text/css}" media="${4:screen}" />
 ```
 
 
-#### python-mode 
+**css-mode** 
 
-function
+1. bg 
 
-```python file=./snippets/python-mode/f 
-# -*- mode: snippet -*-
-# name: function
-# key: f
-# group: definitions
+```txt file=./snippets/css-mode/bg 
+
+# name: background-color
 # --
-def ${1:fun}(${2:args}):
-    $0
+background-color: #${1:fff};
+```
+
+**clj-mode**
+
+1. require 
+
+```clojure file=./snippets/clojure-mode/require 
+
+# name : require
+# key  : require
+# expand-env : ((yas-triggers-in-field nil)))
+# --
+(:require [$1 :as $2]) $>
+```
+
+2. key opts 
+
+```clojure file=./snippets/clojure-mode/opts 
+
+# key: opts
+# name: opts
+# --
+{:keys [$1]$>
+ :or {$2}$>
+ :as $3}$>
+```
+
+3. fn 
+
+```clojure file=./snippets/clojure-mode/fn 
+
+# name: fn
+# key: fn
+# --
+(fn [$1]
+  $0)$>
+```
+
+4. def
+
+```clojure file=./snippets/clojure-mode/def 
+
+# name: def
+# key : def
+# --
+(def $0)
 ```
