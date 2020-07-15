@@ -1,0 +1,5 @@
+#!/usr/bin/sh 
+cp -v ~/.emacs.d/init.el ~/Desktop/p/emacs-backup/init`date +%Y%m%d%H`.el
+cp -v ~/.emacs.d/readme.md ~/Desktop/p/emacs-backup/readme`date +%Y%m%d%H`.md
+cp -v ~/.emacs.d/snippet.md ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`.md
+# file=./bin/backup
