@@ -1,7 +1,8 @@
 ## Configuring Emacs
 
-I choose to load my emacs configuration and snippet from markdown. i think it better to managing the snippet and config from one files. 
-Here it is. (Long live literate mode! ;)
+I choose to load my emacs configuration and snippet from markdown. i personally think it's better to manage all the snippet and configuration from one files.   
+
+Here it is. (Long live literate mode! ;)  
 
 **init.el**
 
@@ -261,7 +262,7 @@ Here it is. (Long live literate mode! ;)
 ;; yasnippet
 (require 'yasnippet)
 (yas-global-mode 1)
-(setq yas-snippet-dirs '("~/.emacs.d/snippet/"))
+(setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
 
 
 ;; gist
@@ -349,7 +350,8 @@ Here it is. (Long live literate mode! ;)
 (custom-bindings-mode 1)
 ```
 
-**Poor Man's Git ;0**  
+
+**Poor Man's Git ;)**  
 
 ```emacs-lisp
 
@@ -357,14 +359,17 @@ Here it is. (Long live literate mode! ;)
   (interactive)
   (shell-command "git status" "*git*"))
 
+
 (defun remove-output-async ()
   (add-to-list 'display-buffer-alist
 			   (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil))))
+
 
 (defun git/add ()
   (interactive)
   (let (which-file) (setq which-file (read-file-name "git add ~"))
 	   (async-shell-command (concat "git add " which-file))))
+
 
 (defun git/commit ()
   (interactive)
@@ -372,9 +377,11 @@ Here it is. (Long live literate mode! ;)
 	(setq msg (read-string "git commit -m "))
 	(shell-command (concat "git commit -m '" msg "'") "*git*")))
 
+
 (defun git/push (origin branch)
   (interactive)
   (shell-command (concat "git push -u " origin " " branch)))
+
 
 (defun git/push-origin ()
   (interactive)
@@ -384,6 +391,7 @@ Here it is. (Long live literate mode! ;)
 		(setq b "master")
 	  (setq b branch))
 	(git/push "origin" b)))
+
 
 (defun git/remote-add (origin url)
   (interactive)
@@ -409,7 +417,95 @@ Here it is. (Long live literate mode! ;)
 
 ```
 
+**Load and Tangle Snippet**
+
+```emacs-lisp
+
+(defun snippet/write-file (list-block)
+  (interactive)
+  (let ((filename (cdr (assoc 'file list-block)))
+		(content  (cdr (assoc 'content list-block))))
+	(unless (file-exists-p filename)
+	  (let ((dir (file-name-directory filename)))
+		(unless (file-exists-p dir)	  
+		  (make-directory dir t))))
+	(with-temp-buffer
+	  (insert content)
+	  (write-region (point-min) (point-max) filename)
+	  (message "write-region %s with content %s" filename content)
+	  )	
+	))
+
+
+(defun snippet/get-file-string (path)
+  (with-temp-buffer
+	(insert-file-contents path)
+	(buffer-string)))
+
+
+(defun snippet/read-meta (str)
+  (interactive)
+  (let ((res (list)))
+	(with-temp-buffer
+	  (insert str)
+	  (goto-char (point-min))	  
+	  (while (not (eobp))
+		(forward-line 1)
+	 	(re-search-forward "^```" (point-max) t)
+		(let (s e c f)
+		  (re-search-forward "file=\\([^\s]+\\)" (point-max) t)
+		  (setq s (progn (beginning-of-line) (forward-line 1) (point)))		  
+		  (setq f (match-string 1))
+		  (re-search-forward "^```" (point-max) t)
+		  (setq e (match-beginning 0))
+		  (setq c  (buffer-substring-no-properties s e))
+		  (add-to-list 'res (list (cons 'start s)
+								  (cons 'end e)
+								  (cons 'file f)
+								  (cons 'content c)))
+		  )				
+		)	  
+	  )
+	res))
+
+(defun filter-list (@predicate @sequence)
+  (delete "e3824ad41f2ec1ed" (mapcar (lambda ($x) (if (funcall @predicate $x)  $x "e3824ad41f2ec1ed" )) @sequence)))
+
+(defun snippet/filter-nil-file (list-block)
+  (filter-list (lambda (l)
+				 (not (equal (cdr (assoc 'file l)) nil))
+				 ) list-block))
+
+(defun tangle-all-snippets ()
+  (interactive)
+  (let ((p (expand-file-name "~/.emacs.d/snippet.md"))
+		list-block)
+	(setq list-block (snippet/read-meta (snippet/get-file-string p)))
+	(mapcar 'snippet/write-file (snippet/filter-nil-file list-block)))	
+  )
+
+(snippet/write-file '((file . "~/Desktop/out") (content . "fofofofo")))
+
+
+(mapcar 'snippet/write-file 
+		(list '((file . "~/Desktop/out/out1") (content . "out1")) '((file . "~/Desktop/out/out2") (content . "out2"))))
+
+
+(defun reload-yas-snippet ())
+(defun clean-yas-snippet ())
+
+
+(print (snippet/filter-nil-file (snippet/read-meta (snippet/get-file-string "~/.emacs.d/snippet.md"))))
+
+(tangle-all-snippets)
+
+;; (setq jamap (list (list  (cons 'file "foo"))
+;; 				  (list (cons 'file nil))))
+
+```
+
 **Reloading, Syncing dotfile-emacs**
+
 
 ```emacs-lisp
 
@@ -419,8 +515,7 @@ Here it is. (Long live literate mode! ;)
 
 (defun emacs/reload-markdown-init ()
   (interactive)
-  (load-markdown "~/.emacs.d/readme.md")
-  (load-markdown "~/.emacs.d/development.md"))
+  (load-markdown "~/.emacs.d/readme.md"))
 
 (custom-key
   "esy" 'emacs/sync-dotfile
@@ -429,13 +524,11 @@ Here it is. (Long live literate mode! ;)
 
 ```
 
-**Load/Tangle Snippet**
-
 ### Installation, Usage and Setup
 
 **Develop**  
-to start `git clone https://github.com/azizzaeny/dotfile-emacs.git`
-cd into the folder  `sudo chmod u+x ./setup` then `./setup` then start synch files `./sync`  
+to start `git clone https://github.com/azizzaeny/dotfile-emacs.git`    
+cd into that folder  `sudo chmod u+x ./bin/setup` then `./bin/setup` then start synch files `./bin/sync`  
 
 **Prepare Setup**  
 
@@ -444,8 +537,8 @@ cd into the folder  `sudo chmod u+x ./setup` then `./setup` then start synch fil
 #!/usr/bin/sh
 mkdir -p ~/Desktop/p/emacs-backup/
 mkdir -p ~/.emacs.d/snippets/
-sudo chmod u+x ./sync
-sudo chmod u+x ./backup
+sudo chmod u+x ./bin/sync
+sudo chmod u+x ./bin/backup
 # file=./bin/setup
 ```
 
