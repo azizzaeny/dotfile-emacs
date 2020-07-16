@@ -301,8 +301,8 @@ Here it is. (Long live literate mode! ;)
 
 
 ;; auto-complete
-(require 'auto-complete)
-(ac-config-default)
+;; (require 'auto-complete)
+;; (ac-config-default)
 
 
 ;; multi-cursors
