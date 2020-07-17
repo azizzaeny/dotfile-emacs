@@ -467,6 +467,10 @@ Here it is. (Long live literate mode! ;)
 								  (cons 'content c))))))
 	res))
 
+;; todo probably just use seq-filter instead of filter-method above
+;; (require 'seq)
+;; (seq-filter 'numberp '(1 "2" 3))
+
 (defun snippet/filter-nil-file (list-block)
   (filter-list (lambda (l)
 				 (not (equal (cdr (assoc 'file l)) nil))
@@ -499,6 +503,20 @@ Here it is. (Long live literate mode! ;)
 
 ```
 
+**Sorting keybindings**
+
+```emacs-lisp
+
+(custom-key
+  "sortl" 'sort-lines
+  "sortp" 'sort-paragraphs
+  "sortc" 'sort-columns
+  "sortr" 'reverse-region
+  )
+
+
+```
+
 **Reloading, Syncing dotfile-emacs**
 
 
@@ -518,6 +536,118 @@ Here it is. (Long live literate mode! ;)
   "ers" 'restart-emacs)
 
 ```
+
+**Send Code Block to Repl**
+
+```emacs-lisp 
+
+(defun repl/start-repl (&optional init-script repl-name)
+  "start a new shell repl"
+  (interactive)
+  (let ((current-buffer-window (selected-window)))	
+	(if (not repl-name)
+		(shell "*srepl*")
+	  (shell repl-name))	
+	(when init-script	  
+	  (insert init-script)
+	  (sit-for 0.1)
+	  (comint-send-input))
+	;; go back to origin window
+	(select-window current-buffer-window)))
+
+(defun repl/start ()
+  (interactive)
+  (repl/start-repl))
+
+(defun repl/stop-repl ()
+  "stop buffer repl"
+  (interactive)
+  ;; todo check if existsted buffer
+  (kill-buffer "*srepl*"))
+
+(defun repl/send-to-repl (input-str)
+  (interactive)
+  (let ((current-window (selected-window)))
+	;; todo: check if exists buffer
+	(switch-to-buffer-other-window "*srepl*")
+	(goto-char (point-max))
+	(insert input-str)
+	(comint-send-input)
+	(select-window current-window)))
+
+(defun repl/send-buffer ()
+  (interactive)
+  (repl/send-to-repl
+   (buffer-substring-no-properties (point-min) (point-max))))
+
+(defun repl/send-line ()
+  (interactive)
+  ;; todo save-excursion
+  (let ((init-point (point))) ;; save initial potitions
+	(beginning-of-line)
+	(set-mark (point)) ;; creating marker from begining of the line
+	(end-of-line) ;; to the edge line
+	(repl/send-to-repl
+	 (buffer-substring-no-properties (point) (mark)))
+	(setq mark-active nil)
+	(goto-char init-point)))
+
+(defun repl/send-region ()
+  "send region when mark is active"
+  (interactive)
+  (save-excursion
+	(if (and transient-mark-mode mark-active)
+		(repl/send-to-repl
+		 (buffer-substring-no-properties (point) (mark))))))
+
+
+(defun repl/send-markdown-block ())
+(defun repl/send-markdown-buffer())
+
+;; simple but works
+;; todo fix: behaviour when no defun 
+(defun repl/send-lisp ()
+  (interactive)  
+  (set-mark (line-beginning-position))
+  (forward-sexp)
+  (repl/send-to-repl
+   (buffer-substring-no-properties (point) (mark)))
+  (setq mark-active nil)
+  (forward-sexp)) ;; go to the next expression
+
+(defun repl/send-clojure ())
+;; todo clojure forward send-expression
+
+
+;; this is also simple but works
+;; from atlantis.net
+;; todo look at js2 implementation
+(require 'js2-mode)
+(defun repl/send-javascript ()
+  (interactive)
+  (let ((fn (js2-mode-function-at-point (point))))
+	(when fn
+	  (let ((beg (js2-node-abs-pos fn))
+			(end (js2-node-abs-end fn)))
+		(repl/send-to-repl
+		 (buffer-substring-no-properties beg end))
+		))))
+
+;; (srepl/stop-repl)
+;; (srepl/start-repl "clojure")
+;; (srepl/start-repl "ls" "**foo**")
+;; (srepl/send-to-repl "clojure")
+
+(custom-key
+  "re" 'repl/send-line
+  "rb" 'repl/send-buffer
+  "rj" 'repl/send-javascript
+  "rr" 'repl/send-region
+  "rp" 'repl/stop-rep
+  "rs" 'repl/start)
+
+```
+
 
 ### Installation, Usage and Setup
 
