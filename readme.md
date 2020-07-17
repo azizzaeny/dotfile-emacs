@@ -337,9 +337,9 @@ Here it is. (Long live literate mode! ;)
 
 
 (custom-key
-  "me" 'mc/edit-lines
-  "mn" 'mc/mark-next-lines
-  "me" 'emmet-expand-line)
+  "C-m e" 'mc/edit-lines
+  "C-m n" 'mc/mark-next-lines
+  "C-m e" 'emmet-expand-line)
 
 
 (define-minor-mode custom-bindings-mode
@@ -407,13 +407,13 @@ Here it is. (Long live literate mode! ;)
 (remove-output-async) ;; make it silence
 
 (custom-key
-  "gits" 'git/status
-  "gita" 'git/add
-  "gitc" 'git/commit
-  "gitm" 'git/commit  
-  "gitp" 'git/push-origin
-  "gitu" 'git/push-origin
-  "gitr" 'git/remote-add-origin)
+  "C-g s" 'git/status  
+  "C-g a" 'git/add
+  "C-g c" 'git/commit
+  "C-g m" 'git/commit  
+  "C-g p" 'git/push-origin
+  "C-g u" 'git/push-origin
+  "C-g r" 'git/remote-add-origin)
 
 ```
 
@@ -496,9 +496,9 @@ Here it is. (Long live literate mode! ;)
   (yas-reload-all))
 
 (custom-key
-  "snr" 'snippet/reload-yas
-  "snc" 'snippet/clean
-  "snt" 'snippet/tangle-all)
+  "C-s nr" 'snippet/reload-yas
+  "C-s nc" 'snippet/clean
+  "C-s nt" 'snippet/tangle-all)
 
 
 ```
@@ -508,32 +508,10 @@ Here it is. (Long live literate mode! ;)
 ```emacs-lisp
 
 (custom-key
-  "sortl" 'sort-lines
-  "sortp" 'sort-paragraphs
-  "sortc" 'sort-columns
-  "sortr" 'reverse-region
-  )
-
-
-```
-
-**Reloading, Syncing dotfile-emacs**
-
-
-```emacs-lisp
-
-(defun emacs/sync-dotfile ()
-  (interactive)
-  (shell-command "./bin/sync"))
-
-(defun emacs/reload-markdown-init ()
-  (interactive)
-  (load-markdown "~/.emacs.d/readme.md"))
-
-(custom-key
-  "esy" 'emacs/sync-dotfile
-  "erl" 'emacs/reload-markdown-init
-  "ers" 'restart-emacs)
+  "C-s ol" 'sort-lines
+  "C-s op" 'sort-paragraphs
+  "C-s oc" 'sort-columns
+  "C-s or" 'reverse-region)
 
 ```
 
@@ -598,8 +576,19 @@ Here it is. (Long live literate mode! ;)
   (save-excursion
 	(if (and transient-mark-mode mark-active)
 		(repl/send-to-repl
-		 (buffer-substring-no-properties (point) (mark))))))
+		 (buffer-substring-no-properties (point) (mark))))
+	)
+  (setq mark-active nil))
 
+(defun repl/send-region-or-line ()
+  (interactive)
+  (save-excursion
+	(repl/start-repl)
+	(if (and transient-mark-mode mark-active)
+		(repl/send-region)
+	  (repl/send-line)
+	  )
+	(setq mark-active nil)))
 
 (defun repl/send-markdown-block ())
 (defun repl/send-markdown-buffer())
@@ -639,13 +628,32 @@ Here it is. (Long live literate mode! ;)
 ;; (srepl/send-to-repl "clojure")
 
 (custom-key
-  "re" 'repl/send-line
-  "rb" 'repl/send-buffer
-  "rj" 'repl/send-javascript
-  "rr" 'repl/send-region
-  "rp" 'repl/stop-rep
-  "rs" 'repl/start)
+  "C-r e"  'repl/send-line
+  "C-r b"  'repl/send-buffer
+  "C-r j"  'repl/send-javascript
+  "C-r r"  'repl/send-region
+  "C-r p"  'repl/stop-repl
+  "e"      'repl/send-region-or-line
+  "C-r s"  'repl/start)
 
+```
+
+**Reloading, Syncing dotfile-emacs**
+
+```emacs-lisp
+
+(defun emacs/sync-dotfile ()
+  (interactive)
+  (shell-command "./bin/sync"))
+
+(defun emacs/reload-markdown-init ()
+  (interactive)
+  (load-markdown "~/.emacs.d/readme.md"))
+
+(custom-key
+  "C-e sy" 'emacs/sync-dotfile
+  "C-e rl" 'emacs/reload-markdown-init
+  "C-e rs" 'restart-emacs)
 ```
 
 
