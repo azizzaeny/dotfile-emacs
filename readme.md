@@ -207,11 +207,13 @@ Here it is. (Long live literate mode! ;)
 (require 'parinfer)
 (setq parinfer-extensions
 	  '(defaults pretty-parens paredit smart-tab smart-yank))
+
 ;; (add-hook 'clojure-mode-hook #'parinfer-mode)
 ;; (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
 ;; (add-hook 'common-lisp-mode-hook #'parinfer-mode)
 ;; (add-hook 'scheme-mode-hook #'parinfer-mode)
 ;; (add-hook 'lisp-mode-hook #'parinfer-mode)
+
 (setq parinfer-auto-switch-indent-mode nil)  ;; default
 (setq parinfer-auto-switch-indent-mode-when-closing nil)  ;; default
 (setq parinfer-delay-invoke-threshold 6000)  ;; default
@@ -227,7 +229,7 @@ Here it is. (Long live literate mode! ;)
 
 ;; smartparen
 (require 'smartparens-config)
-(add-hook 'clojure-mode-hook #'smartparens-strict-mode)
+(add-hook 'clojure-mode-hook #'smartparens-mode)
 (add-hook 'js-mode-hook #'smartparens-mode)
 
 
@@ -252,8 +254,8 @@ Here it is. (Long live literate mode! ;)
 
 ;;emmet
 (require 'emmet-mode)
-(add-hook 'css-mode-hook  'emmet-mode) 
-(add-hook 'html-mode-hook 'emmet-mode)
+;;(add-hook 'css-mode-hook  'emmet-mode) 
+;;(add-hook 'html-mode-hook 'emmet-mode)
 (setq emmet-indentation 2)
 (setq emmet-self-closing-tag-style " /")
 
@@ -310,7 +312,7 @@ Here it is. (Long live literate mode! ;)
 
 ;; auto-pair
 (require 'autopair)
-(autopair-global-mode)
+;;(autopair-global-mode)
 ```
 
 **Custom Key Bindings Basic Editing/Searching**
