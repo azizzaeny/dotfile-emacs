@@ -318,6 +318,7 @@ Here it is. (Long live literate mode! ;)
 **Custom Key Bindings Basic Editing/Searching**
 
 ```emacs-lisp
+
 (defvar custom-bindings-map (make-keymap)
   "A keymap for custom bindings.")
 
@@ -328,28 +329,44 @@ Here it is. (Long live literate mode! ;)
  "C-x ag"  'counsel-ag
  "C-x f"   'counsel-describe-function
  "C-x l"   'counsel-find-library
- "C-x f" nil )
+ "C-x f" nil
+ "C-x <left>" nil
+ "C-x <right>" nil
+ )
 
 
 (defconst custom-key "C-c")
 
-
 (general-create-definer
   custom-key :prefix "C-c")
-
-
-(custom-key
-  "C-m e" 'mc/edit-lines
-  "C-m n" 'mc/mark-next-lines
-  "C-m e" 'emmet-expand-line)
 
 
 (define-minor-mode custom-bindings-mode
   "A mode that activates custom-bindings."
   t nil custom-bindings-map)
 
+(custom-key
+  "m e" 'mc/edit-lines
+  "m n" 'mc/mark-next-lines
+  "m e" 'emmet-expand-line
+  "<right>" 'shrink-window-horizontally
+  "<left>"  'enlarge-window-horizontally
+  "<down>"  'shrink-window
+  "<up>"    'enlarge-window)
 
 (custom-bindings-mode 1)
+
+```
+
+__Sorting keybindings__
+
+```emacs-lisp
+
+(custom-key
+  "s ol" 'sort-lines
+  "s op" 'sort-paragraphs
+  "s oc" 'sort-columns
+  "s or" 'reverse-region )
 ```
 
 
@@ -409,13 +426,13 @@ Here it is. (Long live literate mode! ;)
 (remove-output-async) ;; make it silence
 
 (custom-key
-  "C-g s" 'git/status  
-  "C-g a" 'git/add
-  "C-g c" 'git/commit
-  "C-g m" 'git/commit  
-  "C-g p" 'git/push-origin
-  "C-g u" 'git/push-origin
-  "C-g r" 'git/remote-add-origin)
+  "g s" 'git/status  
+  "g a" 'git/add
+  "g c" 'git/commit
+  "g m" 'git/commit  
+  "g p" 'git/push-origin
+  "g u" 'git/push-origin
+  "g r" 'git/remote-add-origin)
 
 ```
 
@@ -498,22 +515,10 @@ Here it is. (Long live literate mode! ;)
   (yas-reload-all))
 
 (custom-key
-  "C-s nr" 'snippet/reload-yas
-  "C-s nc" 'snippet/clean
-  "C-s nt" 'snippet/tangle-all)
+  "s nr" 'snippet/reload-yas
+  "s nc" 'snippet/clean
+  "s nt" 'snippet/tangle-all)
 
-
-```
-
-**Sorting keybindings**
-
-```emacs-lisp
-
-(custom-key
-  "C-s ol" 'sort-lines
-  "C-s op" 'sort-paragraphs
-  "C-s oc" 'sort-columns
-  "C-s or" 'reverse-region)
 
 ```
 
@@ -630,13 +635,13 @@ Here it is. (Long live literate mode! ;)
 ;; (srepl/send-to-repl "clojure")
 
 (custom-key
-  "C-r e"  'repl/send-line
-  "C-r b"  'repl/send-buffer
-  "C-r j"  'repl/send-javascript
-  "C-r r"  'repl/send-region
-  "C-r p"  'repl/stop-repl
+  "r e"  'repl/send-line
+  "r b"  'repl/send-buffer
+  "r j"  'repl/send-javascript
+  "r r"  'repl/send-region
+  "r p"  'repl/stop-repl
   "e"      'repl/send-region-or-line
-  "C-r s"  'repl/start)
+  "r s"  'repl/start)
 
 ```
 
@@ -653,9 +658,10 @@ Here it is. (Long live literate mode! ;)
   (load-markdown "~/.emacs.d/readme.md"))
 
 (custom-key
-  "C-e sy" 'emacs/sync-dotfile
-  "C-e rl" 'emacs/reload-markdown-init
-  "C-e rs" 'restart-emacs)
+  "sy" 'emacs/sync-dotfile
+  "rl" 'emacs/reload-markdown-init
+  "rs" 'restart-emacs)
+
 ```
 
 
@@ -700,7 +706,7 @@ cp -v ~/.emacs.d/snippet.md ~/Desktop/p/emacs-backup/snippet`date +%Y%m%d%H`.md
 ```
 
 
-## Bugs and Strange behaviour 
+[## Bugs and Strange behaviour 
 - The functions doesnt take the last emacs-lisp value when there is some code on it so make it at least two emacs-lisp and blank last-line 
 
 
